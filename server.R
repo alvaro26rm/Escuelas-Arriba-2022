@@ -2,6 +2,8 @@ library(leaflet)
 library(RColorBrewer)
 library(scales)
 library(lattice)
+library(tidyverse)
+
 
 server <- function(input, output, session) {
   
@@ -14,39 +16,84 @@ server <- function(input, output, session) {
       setView(lng = -70.76293, lat = -33.52341, zoom = 11)
     
   })
-  
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
   observe({
     colorBy <- input$color
-    sizeBy <- input$size
     
     if (colorBy == "EA_2021") {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
       colorData <- ifelse(eadata$EA_2021 == "SI", "SI", "NO")
-      pal <- colorFactor(c("navy", "red"), colorData)
+      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
     }
      else {
       colorData <- eadata[[colorBy]]
-      pal <- colorFactor(c("orange", "purple"), colorData)
+      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
     }
+  
+    leafletProxy("map", data = eadata) %>%
+      clearShapes() %>%
+      addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
+                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
+      addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
+                layerId="colorLegend")
+  })
+  
+  observe({
+    colorBy <- input$color
     
-    
-    if (sizeBy == "EA_2021") {
-      # Radius is treated specially in the "superzip" case.
-      radius <- ifelse(eadata$EA_2021 == "SI", 1000, 1000)
-    }  else {
-      radius <- eadata[[sizeBy]] * 10
+    if (colorBy == "RURAL") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      colorData <- ifelse(eadata$RURAL == "1", "SI", "NO")
+      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
     }
-    
+    else {
+      colorData <- eadata[[colorBy]]
+      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
+    }
     
     leafletProxy("map", data = eadata) %>%
       clearShapes() %>%
-      addCircles(~LONGITUD, ~LATITUD, radius=radius, layerId=~RBD,
-                 stroke=FALSE, fillOpacity=0.4, fillColor=pal(colorData)) %>%
+      addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
+                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
       addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
                 layerId="colorLegend")
+  })
+  
+  observe({
+    colorBy <- input$color
+    eventExpr <- input$map_zoom
+    
+    if (colorBy == "PIE") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      colorData <- ifelse(eadata$PIE == "1", "SI", "NO")
+      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
+    }
+    else {
+      colorData <- eadata[[colorBy]]
+      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
+    }
+    
+  
+    print(input$map_zoom)
+    leafletProxy("map", data = eadata) %>%
+      clearShapes() %>%
+      addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
+                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData),
+                 weight = case_when(input$map_zoom <=4 ~1, 
+                                    input$map_zoom ==5 ~2, 
+                                    input$map_zoom ==6 ~3, 
+                                    input$map_zoom ==7 ~5, 
+                                    input$map_zoom ==8 ~7, 
+                                    input$map_zoom ==9 ~9, 
+                                    input$map_zoom >9 ~11)) %>%
+      addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
+                layerId="colorLegend")
+    
+    
   })
   
   # Show a popup at the given location
@@ -104,8 +151,6 @@ server <- function(input, output, session) {
                          selected = stillSelected, server = TRUE)
   })
   
-  
-  
   observe({
     if (is.null(input$goto))
       return()
@@ -121,7 +166,6 @@ server <- function(input, output, session) {
     })
   })
   
-  
   output$eatabla <- DT::renderDataTable({
     df <- eadata %>%
       filter(
@@ -134,10 +178,10 @@ server <- function(input, output, session) {
     
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
     
-    
   }  )
   
 }
 
 
 shinyApp(ui = ui, server = server)
+
