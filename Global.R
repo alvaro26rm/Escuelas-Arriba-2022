@@ -132,7 +132,7 @@ eadata <- merge(eadata, ive,
 inscritos <- read_xlsx("data/inscritos.xlsx")
 
 # Nos quedamos con las variables de interés
-inscritos <- inscritos[ ,c(3,18)]
+inscritos <- inscritos[ ,c(4,9)]
 
 # Unimos la base inscritos con eadata
 eadata <- merge(eadata, inscritos,
