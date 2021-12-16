@@ -1,7 +1,7 @@
 # Escuelas Arriba 2021
 # Armado de base de datos
 
-# Nota: Esta base servirá para nuestro ShinyApp más delante
+# Nota: Esta base servirá para nuestra ShinyApp más adelante
 
 library(readr)
 library(readxl)
@@ -14,7 +14,7 @@ library(writexl)
 rm(list=ls())
 
 # Fijo directorio
-setwd("/Users/alvaroromero/Desktop/EA")
+setwd("C:/Users/alvaro.romero/Escritorio/Escuelas-Arriba-2022-main")
 
 # Cargo base de establecimientos a nivel nacional
 eadata <- read_delim("data/matricula.csv",
