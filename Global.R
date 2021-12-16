@@ -14,11 +14,12 @@ library(writexl)
 rm(list=ls())
 
 # Fijo directorio
-setwd("C:/Users/alvaro.romero/Escritorio/EA/EA")
+setwd("/Users/alvaroromero/Desktop/EA")
 
 # Cargo base de establecimientos a nivel nacional
 eadata <- read_delim("data/matricula.csv",
                      delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
 
 # De la base nacional, quedarme solamente con los niveles que abarca el programa
 eadata <- eadata[which(eadata$COD_ENSE2==2 |
@@ -115,8 +116,16 @@ ubicacion <- rename(ubicacion, RBD = `RBD,N,19,11`)
 ubicacion <- rename(ubicacion, LATITUD = `LATITUD,N,19,11`)
 ubicacion <- rename(ubicacion, LONGITUD = `LONGITUD,N,19,11`)
 
-# Unimos ubicaciÃ³n con eadata
+# Unimos ubicación con eadata
 eadata <- merge(eadata, ubicacion,
+                by="RBD")
+
+# Cargamos la base ive
+ive <- read_delim("data/ive.csv", delim = ";", 
+                  escape_double = FALSE, trim_ws = TRUE)
+
+# Unimos ive con eadata
+eadata <- merge(eadata, ive,
                 by="RBD")
 
 # Cargamos la base de escuelas arriba
@@ -129,11 +138,18 @@ inscritos <- inscritos[ ,c(3,18)]
 eadata <- merge(eadata, inscritos,
                 by="RBD")
 
-# Arreglamos el nombre de la variable EA_2021
+# Arreglamos el nombre de la variable EA_2021 e IVE
 eadata <- rename(eadata, EA_2021 = `EA 2021`)
+eadata <- rename(eadata, IVE_BÁSICA= `IVE BÁSICA 2021`)
+eadata <- rename(eadata, IVE_MEDIA= `IVE MEDIA 2021`)
+
+# Creamos variable NIVEL
+eadata <- mutate(eadata, NIVEL = ifelse(IVE_BÁSICA!= "NO" & IVE_MEDIA!= "NO", "BÁSICA Y MEDIA",
+                                        ifelse(IVE_BÁSICA!= "NO" & IVE_MEDIA == "NO", "BÁSICA",
+                                               ifelse(IVE_BÁSICA=="NO" & IVE_MEDIA!="NO", "MEDIA", "F"))))
 
 # Quitar objetos que no necesito
-rm(easostenedor, inscritos, nomsostenedor, ubicacion)
+rm(easostenedor, inscritos, nomsostenedor, ubicacion, ive)
 
 # Cambiar nombres de la variable NOM_REG_RBD_A Y EA_2021
 eadata <- mutate(eadata, REGIÓN = ifelse(NOM_REG_RBD_A == "ANTOF", "ANTOFAGASTA",
@@ -155,13 +171,20 @@ eadata <- mutate(eadata, REGIÓN = ifelse(NOM_REG_RBD_A == "ANTOF", "ANTOFAGASTA
 
 eadata$EA_2021 <- toupper(eadata$EA_2021)
 
+eadata <- mutate(eadata, RURAL_RBD = ifelse(RURAL_RBD == "1", "RURAL", "URBANO"))
+eadata <- mutate(eadata, CONVENIO_PIE = ifelse(CONVENIO_PIE == "1", "SI", "NO"))
 
+eadata <- mutate(eadata, COD_DEPE2 = ifelse(COD_DEPE2 == "1", "MUNICIPAL",
+                                            ifelse(COD_DEPE2 == "2", "PARTICULAR SUBVENCIONADO",
+                                                   ifelse(COD_DEPE2 == "3", "PARTICULAR PAGADO",
+                                                          ifelse(COD_DEPE2 == "4", "CORPORACIÓN DE ADMINISTRACIÓN DELEGADA",
+                                                                 ifelse(COD_DEPE2 == "5", "SERVICIO LOCAL DE EDUCACIÓN", "F"))))))
 
 eadata$NOM_REG_RBD_A <- NULL
 
 attach(eadata)
 
-eadata <- data.frame(RBD, NOM_RBD, REGIÓN , NOM_COM_RBD, NOM_DEPROV_RBD, NOMBRE_SOST, RURAL_RBD, TOTAL_MAT, CONVENIO_PIE, LATITUD, LONGITUD, EA_2021  )
+eadata <- data.frame(RBD, NOM_RBD, REGIÓN , NOM_COM_RBD, NOM_DEPROV_RBD, COD_DEPE2, NOMBRE_SOST, NIVEL, IVE_BÁSICA, IVE_MEDIA, RURAL_RBD, TOTAL_MAT, CONVENIO_PIE, LATITUD, LONGITUD, EA_2021)
 
 detach(eadata)
 
@@ -175,5 +198,7 @@ eadata <- rename(eadata, PIE = CONVENIO_PIE)
 eadata <- rename(eadata, LATITUD = LATITUD)
 eadata <- rename(eadata, LONGITUD = LONGITUD)
 eadata <- rename(eadata, SOSTENEDOR = NOMBRE_SOST)
+eadata <- rename(eadata, ANTIGUA = EA_2021)
+eadata <- rename(eadata, DEPENDENCIA = COD_DEPE2)
 
 save.image(file="data/eadata.RData")
