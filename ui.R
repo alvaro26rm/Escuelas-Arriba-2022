@@ -1,11 +1,6 @@
 library(leaflet)
 library(shiny)
 
-setwd("/Users/alvaroromero/Desktop/EA")
-
-# Choices for drop-downs
-load("data/eadata.RData")
-
 vars <- c(
   "Antigua" = "ANTIGUA",
   "Rural" = "RURAL",
@@ -32,12 +27,28 @@ ui <- navbarPage("Escuelas Arriba", id="nav",
                                       width = 330, height = "auto",
                                       
                                       h2("Explorador de Datos"),
+                                      selectInput("color", "Categoría", vars),
+                                      h2(),
+                                      h4("EE Inscritos:"),
+                                      h2(),
+                                      h4("EE Nuevos:"),
+                                      h2(),
+                                      h4("EE Antiguos:"),
+                                      h2(),
+                                      h4("EE Urbanos:"),
+                                      h2(),
+                                      h4("EE Rurales:"),
+                                      h2(),
+                                      h4("EE PIE:"),
+                                      h2(),
+                                      h4("Matrícula EA:")
                                       
-                                      selectInput("color", "Categoría", vars)
+                                      
+                                      
                         ),
                         
                         tags$div(id="cite",
-                                 'Datos compilados a través del', tags$em(''), ' Ministerio de Educación, por Álvaro Romero (2021).'
+                                 'Los datos provienen de las bases públicas del', tags$em(''), 'Centro de Estudios del Ministerio de Educación y JUNAEB (2021) .'
                         )
                     )
            ),
@@ -63,4 +74,6 @@ ui <- navbarPage("Escuelas Arriba", id="nav",
                      ),
            
            conditionalPanel("false", icon("crosshair"))
+           
 )
+  
