@@ -1,15 +1,15 @@
 library(leaflet)
 library(shiny)
 
-setwd("C:/Users/alvaro.romero/Escritorio/EA/EA")
+setwd("/Users/alvaroromero/Desktop/EA")
 
 # Choices for drop-downs
 load("data/eadata.RData")
 
 vars <- c(
-  "Escuela Nueva" = "EA_2021",
-  "Matrícula" = "MATRÍCULA",
-  "Rural" = "RURAL"
+  "Antigua" = "ANTIGUA",
+  "Rural" = "RURAL",
+  "PIE" = "PIE"
 )
 
 ui <- navbarPage("Escuelas Arriba", id="nav",
@@ -33,8 +33,7 @@ ui <- navbarPage("Escuelas Arriba", id="nav",
                                       
                                       h2("Explorador de Datos"),
                                       
-                                      selectInput("color", "Color", vars),
-                                      selectInput("size", "Size", vars, selected = "EA_2021")
+                                      selectInput("color", "Categoría", vars)
                         ),
                         
                         tags$div(id="cite",
