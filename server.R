@@ -64,7 +64,6 @@ server <- function(input, output, session) {
   
   observe({
     colorBy <- input$color
-    eventExpr <- input$map_zoom
     
     if (colorBy == "PIE") {
       # Color and palette are treated specially in the "superzip" case, because
