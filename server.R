@@ -5,7 +5,7 @@ library(lattice)
 library(tidyverse)
 
 
-server <- function(input, output, session) {
+function(input, output, session) {
   
   ## Interactive Map ###########################################
   
