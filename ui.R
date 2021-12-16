@@ -9,7 +9,7 @@ vars <- c(
   "PIE" = "PIE"
 )
 
-ui <- navbarPage("Escuelas Arriba", id="nav",
+navbarPage("Escuelas Arriba", id="nav",
            
            tabPanel("Mapa interactivo",
                     div(class="outer",
