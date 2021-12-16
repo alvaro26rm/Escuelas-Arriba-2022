@@ -1,6 +1,8 @@
 library(leaflet)
 library(shiny)
 
+load("data/eadata.RData")
+
 vars <- c(
   "Antigua" = "ANTIGUA",
   "Rural" = "RURAL",
