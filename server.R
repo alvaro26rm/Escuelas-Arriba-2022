@@ -21,10 +21,10 @@ server <- function(input, output, session) {
   observe({
     colorBy <- input$color
     
-    if (colorBy == "EA_2021") {
+    if (colorBy == "ANTIGUA") {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
-      colorData <- ifelse(eadata$EA_2021 == "SI", "SI", "NO")
+      colorData <- ifelse(eadata$ANTIGUA == "SI", "SI", "NO")
       pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
     }
      else {
@@ -46,7 +46,7 @@ server <- function(input, output, session) {
     if (colorBy == "RURAL") {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
-      colorData <- ifelse(eadata$RURAL == "1", "SI", "NO")
+      colorData <- ifelse(eadata$RURAL == "RURAL", "RURAL", "URBANO")
       pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
     }
     else {
@@ -69,7 +69,7 @@ server <- function(input, output, session) {
     if (colorBy == "PIE") {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
-      colorData <- ifelse(eadata$PIE == "1", "SI", "NO")
+      colorData <- ifelse(eadata$PIE == "SI", "SI", "NO")
       pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
     }
     else {
@@ -77,19 +77,11 @@ server <- function(input, output, session) {
       pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
     }
     
-  
-    print(input$map_zoom)
+
     leafletProxy("map", data = eadata) %>%
       clearShapes() %>%
       addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
-                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData),
-                 weight = case_when(input$map_zoom <=4 ~1, 
-                                    input$map_zoom ==5 ~2, 
-                                    input$map_zoom ==6 ~3, 
-                                    input$map_zoom ==7 ~5, 
-                                    input$map_zoom ==8 ~7, 
-                                    input$map_zoom ==9 ~9, 
-                                    input$map_zoom >9 ~11)) %>%
+                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
       addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
                 layerId="colorLegend")
     
@@ -104,9 +96,13 @@ server <- function(input, output, session) {
       tags$strong(HTML(sprintf("%s, %s",
                                selectedEA$COMUNA, selectedEA$REGIÓN
       ))), tags$br(),
-      sprintf("RBD: %s", selectedEA$RBD), tags$br(),
-      sprintf("Matrícula total: %s", selectedEA$MATRÍCULA), tags$br(),
-      sprintf("Sostenedor: %s", as.character(selectedEA$SOSTENEDOR))
+      tags$strong(sprintf("RBD: %s", selectedEA$RBD)), tags$br(),
+      tags$strong(sprintf("MATRÍCULA EA: %s", selectedEA$MATRÍCULA)), tags$br(),
+      tags$strong(sprintf("NIVEL: %s", selectedEA$NIVEL)), tags$br(),
+      tags$strong(sprintf("IVE BÁSICA: %s", selectedEA$IVE_BÁSICA)), tags$br(),
+      tags$strong(sprintf("IVE MEDIA: %s", selectedEA$IVE_MEDIA)), tags$br(),
+      tags$strong(sprintf("DEPENDENCIA: %s", selectedEA$DEPENDENCIA)), tags$br(),
+      tags$strong(sprintf("SOSTENEDOR: %s", as.character(selectedEA$SOSTENEDOR)))
     ))
     leafletProxy("map") %>% addPopups(lng, lat, content, layerId = RBD)
   }
@@ -184,4 +180,3 @@ server <- function(input, output, session) {
 
 
 shinyApp(ui = ui, server = server)
-
