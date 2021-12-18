@@ -4,6 +4,8 @@ library(scales)
 library(lattice)
 require(tidyverse)
 require(dplyr)
+library(ggplot2)
+library(ggpubr)
 
 load("data/eadata.RData")
 
@@ -15,7 +17,7 @@ function(input, output, session) {
   output$map <- renderLeaflet({
     leaflet() %>%
       addTiles()%>%
-      setView(lng = -70.56428186, lat = -33.44872712, zoom = 12)
+      setView(lng = -70.56428186, lat = -33.44872712, zoom = 10)
     
   })
   # This observer is responsible for maintaining the circles and legend,
@@ -28,11 +30,11 @@ function(input, output, session) {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
       colorData <- ifelse(eadata$NUEVA == "SI", "SI", "NO")
-      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
+      pal <- colorFactor( c("#377eb8", "#ff7f00"), colorData)
     }
     else {
       colorData <- eadata[[colorBy]]
-      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
+      pal <- colorFactor( c("#377eb8", "#ff7f00"), colorData)
     }
     
     leafletProxy("map", data = eadata) %>%
@@ -50,11 +52,11 @@ function(input, output, session) {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
       colorData <- ifelse(eadata$PIE == "SI", "SI", "NO")
-      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
+      pal <- colorFactor( c("#377eb8", "#ff7f00"), colorData)
     }
     else {
       colorData <- eadata[[colorBy]]
-      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
+      pal <- colorFactor( c("#377eb8", "#ff7f00"), colorData)
     }
     
     leafletProxy("map", data = eadata) %>%
@@ -72,11 +74,11 @@ function(input, output, session) {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
       colorData <- ifelse(eadata$RURAL == "RURAL", "RURAL", "URBANO")
-      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
+      pal <- colorFactor( c("#ff7f00", "#377eb8"), colorData)
     }
     else {
       colorData <- eadata[[colorBy]]
-      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
+      pal <- colorFactor( c("#ff7f00", "#377eb8"), colorData)
     }
     
     leafletProxy("map", data = eadata) %>%
@@ -118,6 +120,11 @@ function(input, output, session) {
     isolate({
       showEAPopup(event$id, event$lat, event$lng)
     })
+  })
+  
+  ## Análisis de Datos ###########################################
+  output$bargraph <- renderPlot({
+    
   })
   
   ## Data Explorer ###########################################
