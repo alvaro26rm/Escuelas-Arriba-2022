@@ -10,7 +10,6 @@ vars <- c(
 )
 
 navbarPage("Escuelas Arriba", id="nav",
-           
            tabPanel("Mapa interactivo",
                     div(class="outer",
                         
@@ -27,30 +26,9 @@ navbarPage("Escuelas Arriba", id="nav",
                         absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
                                       draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
                                       width = 330, height = "auto",
-                                      h5("Explorador de Datos"),
-                                      selectInput("color", "Categoría", vars),
-                                      selectizeInput(
-                                        "region", label=h5("Seleccione región:",
-                                                           style = "font-family: 'Roboto Condensed', sans-serif;
-        font-weight: 500;"), choices=c("XV - Arica y Parinacota","I - Tarapaca","II - Antofagasta","III - Atacama","IV - Coquimbo",
-                                       "V - Valparaiso","XIII - Metropolitana","VI - Libertador General Bernardo O'Higgins","VII - Maule",
-                                       "XVI - Ñuble", "VIII - Biobio", "IX - Araucania","XIV - Los Rios","X - Los Lagos", 
-                                       "XI - Aysen", "XII - Magallanes"), 
-                                       selected="XIII - Metropolitana", width="90%"),
+                                      h2("Explorador de Datos"),
                                       h2(),
-                                      h4("EE Inscritos: 1.724"),
-                                      h2(),
-                                      h4("EE Nuevos: 563"),
-                                      h2(),
-                                      h4("EE Antiguos: 1.146"),
-                                      h2(),
-                                      h4("EE Urbanos: 1.181"),
-                                      h2(),
-                                      h4("EE Rurales: 583"),
-                                      h2(),
-                                      h4("EE Convenio PIE: 1.361"),
-                                      h2(),
-                                      h4("Matrícula EA: 503.537")
+                                      selectInput("color", "Seleccione variable", vars)
                         ),
                         tags$div(id="cite",
                                  'Los datos provienen de las bases públicas del', tags$em(''), 'Centro de Estudios del Ministerio de Educación y JUNAEB (2021) .'
@@ -58,16 +36,56 @@ navbarPage("Escuelas Arriba", id="nav",
                     )
            ),
            
+           tabPanel("Análisis",
+                    titlePanel("My Shiny App"),
+                    sidebarLayout(
+                      sidebarPanel(
+                        h2("Installation"),
+                        p("Shiny is available on CRAN, so you can install it in the usual way from your R console:"),
+                        code('install.packages("shiny")'),
+                        br(),
+                        br(),
+                        br(),
+                        br(),
+                        img(src = "rstudio.png", height = 70, width = 200),
+                        br(),
+                        "Shiny is a product of ", 
+                        span("RStudio", style = "color:blue")
+                      ),
+                      mainPanel(
+                        h1("Introducing Shiny"),
+                        p("Shiny is a new package from RStudio that makes it ", 
+                          em("incredibly easy "), 
+                          "to build interactive web applications with R."),
+                        br(),
+                        p("For an introduction and live examples, visit the ",
+                          a("Shiny homepage.", 
+                            href = "http://shiny.rstudio.com")),
+                        br(),
+                        h2("Features"),
+                        p("- Build useful web applications with only a few lines of code—no JavaScript required."),
+                        p("- Shiny applications are automatically 'live' in the same way that ", 
+                          strong("spreadsheets"),
+                          " are live. Outputs change instantly as users modify inputs, without requiring a reload of the browser.")
+                      ),
+                      # Application title
+                      titlePanel("Ramen Reviews"),
+                      
+                      # Bar Chart
+                      plotOutput("bargraph")
+                    )
+           ),
+           
            tabPanel("Base de Datos",
                     fluidRow(
                       column(3,
                              selectInput("region", "REGIÓN", eadata$REGIÓN, multiple=TRUE)
- 
+                             
                       ),
                       column(3,
                              conditionalPanel("input.region",
                                               selectInput("comuna", "COMUNA", eadata$COMUNA, multiple=TRUE)
-
+                                              
                              )
                       ),
                       column(3,
