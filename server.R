@@ -2,8 +2,10 @@ library(leaflet)
 library(RColorBrewer)
 library(scales)
 library(lattice)
-library(tidyverse)
+require(tidyverse)
+require(dplyr)
 
+load("data/eadata.RData")
 
 function(input, output, session) {
   
@@ -13,45 +15,24 @@ function(input, output, session) {
   output$map <- renderLeaflet({
     leaflet() %>%
       addTiles()%>%
-      setView(lng = -70.76293, lat = -33.52341, zoom = 11)
+      setView(lng = -70.56428186, lat = -33.44872712, zoom = 12)
     
   })
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
-  observe({
-    colorBy <- input$color
-    
-    if (colorBy == "ANTIGUA") {
-      # Color and palette are treated specially in the "superzip" case, because
-      # the values are categorical instead of continuous.
-      colorData <- ifelse(eadata$ANTIGUA == "SI", "SI", "NO")
-      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
-    }
-     else {
-      colorData <- eadata[[colorBy]]
-      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
-    }
-  
-    leafletProxy("map", data = eadata) %>%
-      clearShapes() %>%
-      addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
-                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
-      addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
-                layerId="colorLegend")
-  })
   
   observe({
     colorBy <- input$color
     
-    if (colorBy == "RURAL") {
+    if (colorBy == "NUEVA") {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
-      colorData <- ifelse(eadata$RURAL == "RURAL", "RURAL", "URBANO")
-      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
+      colorData <- ifelse(eadata$NUEVA == "SI", "SI", "NO")
+      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
     }
     else {
       colorData <- eadata[[colorBy]]
-      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
+      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
     }
     
     leafletProxy("map", data = eadata) %>%
@@ -69,22 +50,41 @@ function(input, output, session) {
       # Color and palette are treated specially in the "superzip" case, because
       # the values are categorical instead of continuous.
       colorData <- ifelse(eadata$PIE == "SI", "SI", "NO")
-      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
+      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
     }
     else {
       colorData <- eadata[[colorBy]]
-      pal <- colorFactor(c("#1f78b4", "#e6550d"), colorData)
+      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
     }
     
-
     leafletProxy("map", data = eadata) %>%
       clearShapes() %>%
       addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
                  stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
       addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
                 layerId="colorLegend")
+  })
+  
+  observe({
+    colorBy <- input$color
     
+    if (colorBy == "RURAL") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      colorData <- ifelse(eadata$RURAL == "RURAL", "RURAL", "URBANO")
+      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
+    }
+    else {
+      colorData <- eadata[[colorBy]]
+      pal <- colorFactor( c("#fdae61", "#2b83ba"), colorData)
+    }
     
+    leafletProxy("map", data = eadata) %>%
+      clearShapes() %>%
+      addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
+                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
+      addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
+                layerId="colorLegend")
   })
   
   # Show a popup at the given location
@@ -95,13 +95,15 @@ function(input, output, session) {
       tags$strong(HTML(sprintf("%s, %s",
                                selectedEA$COMUNA, selectedEA$REGIÓN
       ))), tags$br(),
-      tags$strong(sprintf("RBD: %s", selectedEA$RBD)), tags$br(),
-      tags$strong(sprintf("MATRÍCULA EA: %s", selectedEA$MATRÍCULA)), tags$br(),
-      tags$strong(sprintf("NIVEL: %s", selectedEA$NIVEL)), tags$br(),
-      tags$strong(sprintf("IVE BÁSICA: %s", selectedEA$IVE_BÁSICA)), tags$br(),
-      tags$strong(sprintf("IVE MEDIA: %s", selectedEA$IVE_MEDIA)), tags$br(),
-      tags$strong(sprintf("DEPENDENCIA: %s", selectedEA$DEPENDENCIA)), tags$br(),
-      tags$strong(sprintf("SOSTENEDOR: %s", as.character(selectedEA$SOSTENEDOR)))
+      (sprintf("RBD: %s", selectedEA$RBD)), tags$br(),
+      (sprintf("MATRÍCULA EA: %s", selectedEA$MATRÍCULA)), tags$br(),
+      (sprintf("NIVEL: %s", selectedEA$NIVEL)), tags$br(),
+      (sprintf("CATEGORÍA: %s", selectedEA$CATEGORÍA)), tags$br(),
+      (sprintf("PARTICIPACIÓN EA: %s", selectedEA$PARTICIPACIÓN)), tags$br(),
+      (sprintf("IVE BÁSICA: %s", selectedEA$IVE_BÁSICA)), tags$br(),
+      (sprintf("IVE MEDIA: %s", selectedEA$IVE_MEDIA)), tags$br(),
+      (sprintf("DEPENDENCIA: %s", selectedEA$DEPENDENCIA)), tags$br(),
+      (sprintf("SOSTENEDOR: %s", as.character(selectedEA$SOSTENEDOR)))
     ))
     leafletProxy("map") %>% addPopups(lng, lat, content, layerId = RBD)
   }
@@ -168,7 +170,7 @@ function(input, output, session) {
         is.null(input$comuna) | COMUNA %in% input$comuna,
         is.null(input$escuela) | ESTABLECIMIENTO %in% input$escuela
       ) %>%
-      mutate(Action = paste('<a class="go-map" href="" data-lat="', LATITUD, '" data-long="', LONGITUD, '" data-zip="', RBD , '"><i class="fa fa-crosshairs"></i></a>', sep=""))
+      mutate(MAPA = paste('<a class="go-map" href="" data-lat="', LATITUD, '" data-long="', LONGITUD, '" data-zip="', RBD , '"><i class="fa fa-crosshairs"></i></a>', sep=""))
     action <- DT::dataTableAjax(session, df, outputId = "eatabla")
     
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
