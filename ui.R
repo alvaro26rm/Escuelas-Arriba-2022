@@ -37,42 +37,57 @@ navbarPage("Escuelas Arriba", id="nav",
            ),
            
            tabPanel("Análisis",
-                    titlePanel("My Shiny App"),
-                    sidebarLayout(
-                      sidebarPanel(
-                        h2("Installation"),
-                        p("Shiny is available on CRAN, so you can install it in the usual way from your R console:"),
-                        code('install.packages("shiny")'),
-                        br(),
-                        br(),
-                        br(),
-                        br(),
-                        img(src = "rstudio.png", height = 70, width = 200),
-                        br(),
-                        "Shiny is a product of ", 
-                        span("RStudio", style = "color:blue")
+                    sidebarPanel(
+                      h2("Establecimientos inscritos por región"),
+                      p("- A la fecha se han inscrito", strong("1.724"), "escuelas."),
+                      p("- Regiones Metropolitana, Valparapiso y Maule registran mayor número de inscritos.")
+                    ),
+                    mainPanel(
+                      plotOutput("plot1"), 
+                      hr()
+                    ),
+                    sidebarPanel(
+                      h2("Establecimientos inscritos nuevos por región"),
+                      p("- A la fecha son", strong("563"), "las escuelas que por primera vez participarán del programa Escuelas Arriba."),
+                      p("- Las regiones de Los Lagos, el Maule y Metropolitana son las que mayor número de escuelas nuevas inscritas registran.")
+                    ),
+                    mainPanel(
+                      plotOutput("plot2"),
+                      hr()
+                    ),
+                    sidebarPanel(
+                      h2("Establecimientos inscritos por dependencia"),
+                      p("- Cerca del", strong("60%"), "de los establecimientos inscritos son municipales."),
+                      p("- En segundo lugar están las escuelas particulares subvencionadas (",strong("32%"),".")
+                    ),
+                    mainPanel(
+                      plotOutput("plot3"),
+                      hr()
+                    ),
+                    sidebarPanel(
+                      h2("Establecimientos inscritos urbanos y rurales"),
+                      p("- El",strong("69%"),"de los establecimientos inscritos son urbanos, mientras que el resto son rurales.")
+                         ),
+                    mainPanel(
+                      plotOutput("plot4"),
+                      hr()
+                    ),
+                    sidebarPanel(
+                      h2("Establecimientos inscritos por categoría de desempeño"),
+                      p("- El",strong("14%"),"de los establecimientos inscritos tienen categoría de desempeño Insuficiente."),
+                      p("- Hasta el momento hay más presencia de establecimientos con categoría Medio",strong("49%"),".")
                       ),
-                      mainPanel(
-                        h1("Introducing Shiny"),
-                        p("Shiny is a new package from RStudio that makes it ", 
-                          em("incredibly easy "), 
-                          "to build interactive web applications with R."),
-                        br(),
-                        p("For an introduction and live examples, visit the ",
-                          a("Shiny homepage.", 
-                            href = "http://shiny.rstudio.com")),
-                        br(),
-                        h2("Features"),
-                        p("- Build useful web applications with only a few lines of code—no JavaScript required."),
-                        p("- Shiny applications are automatically 'live' in the same way that ", 
-                          strong("spreadsheets"),
-                          " are live. Outputs change instantly as users modify inputs, without requiring a reload of the browser.")
-                      ),
-                      # Application title
-                      titlePanel("Ramen Reviews"),
-                      
-                      # Bar Chart
-                      plotOutput("bargraph")
+                    mainPanel(
+                      plotOutput("plot5"),
+                      hr()
+                    ),
+                    sidebarPanel(
+                      h2("Establecimientos inscritos y participación en EA"),
+                      p("- Del total de escuelas inscritas, el",strong("63%"),"también participó el año 2021.")
+                        ),
+                    mainPanel(
+                      plotOutput("plot6"),
+                      hr()
                     )
            ),
            
@@ -100,3 +115,4 @@ navbarPage("Escuelas Arriba", id="nav",
            conditionalPanel("false", icon("crosshair"))
            
 )
+
