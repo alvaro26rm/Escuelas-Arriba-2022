@@ -39,16 +39,16 @@ navbarPage("Escuelas Arriba", id="nav",
            tabPanel("Análisis",
                     sidebarPanel(
                       h2("Establecimientos inscritos por región"),
-                      p("- A la fecha se han inscrito", strong("1.724"), "escuelas."),
-                      p("- Regiones Metropolitana, Valparapiso y Maule registran mayor número de inscritos.")
+                      p("- A la fecha se han inscrito", strong("1.922"), "escuelas."),
+                      p("- Regiones Metropolitana, Valparapiso y Los Lagos registran mayor número de inscritos.")
                     ),
                     mainPanel(
                       plotOutput("plot1"), 
                       hr()
                     ),
                     sidebarPanel(
-                      h2("Establecimientos inscritos nuevos por región"),
-                      p("- A la fecha son", strong("563"), "las escuelas que por primera vez participarán del programa Escuelas Arriba."),
+                      h2("Establecimientos nuevos por región"),
+                      p("- A la fecha son", strong("636"), "las escuelas que por primera vez participarán del programa Escuelas Arriba."),
                       p("- Las regiones de Los Lagos, el Maule y Metropolitana son las que mayor número de escuelas nuevas inscritas registran.")
                     ),
                     mainPanel(
@@ -58,37 +58,55 @@ navbarPage("Escuelas Arriba", id="nav",
                     sidebarPanel(
                       h2("Establecimientos inscritos por dependencia"),
                       p("- Cerca del", strong("60%"), "de los establecimientos inscritos son municipales."),
-                      p("- En segundo lugar están las escuelas particulares subvencionadas (",strong("32%"),".")
+                      p("- En segundo lugar están las escuelas particulares subvencionadas ",strong("(32%)"),".")
                     ),
                     mainPanel(
                       plotOutput("plot3"),
                       hr()
                     ),
                     sidebarPanel(
-                      h2("Establecimientos inscritos urbanos y rurales"),
-                      p("- El",strong("69%"),"de los establecimientos inscritos son urbanos, mientras que el resto son rurales.")
-                         ),
+                      h2("Establecimientos nuevos por dependencia"),
+                      p("- El",strong("52%"),"de los establecimientos nuevos inscritos son municipales, mientras que el", strong("43%")," son particulares subvencionados.")
+                    ),
                     mainPanel(
                       plotOutput("plot4"),
                       hr()
                     ),
                     sidebarPanel(
-                      h2("Establecimientos inscritos por categoría de desempeño"),
-                      p("- El",strong("14%"),"de los establecimientos inscritos tienen categoría de desempeño Insuficiente."),
-                      p("- Hasta el momento hay más presencia de establecimientos con categoría Medio",strong("49%"),".")
-                      ),
+                      h2("Establecimientos inscritos urbanos y rurales"),
+                      p("- El",strong("67%"),"de los establecimientos inscritos son urbanos, mientras que el resto son rurales.")
+                    ),
                     mainPanel(
                       plotOutput("plot5"),
                       hr()
                     ),
                     sidebarPanel(
-                      h2("Establecimientos inscritos y participación en EA"),
-                      p("- Del total de escuelas inscritas, el",strong("63%"),"también participó el año 2021.")
-                        ),
+                      h2("Establecimientos inscritos por categoría de desempeño"),
+                      p("- El",strong("13%"),"de los establecimientos inscritos tienen categoría de desempeño Insuficiente."),
+                      p("- Hasta el momento hay más presencia de establecimientos con categoría Medio",strong("40%"),".")
+                    ),
                     mainPanel(
                       plotOutput("plot6"),
                       hr()
+                    ),
+                    sidebarPanel(
+                      h2("Establecimientos nuevos por categoría de desempeño"),
+                      p("- De las 636 escuelas nuevas, el",strong("50%"),"tienen categoría de desempeño Medio."),
+                      p("- En segundo lugar están las de categoría Medio-Bajo.")
+                    ),
+                    mainPanel(
+                      plotOutput("plot7"),
+                      hr()
+                    ),
+                    sidebarPanel(
+                      h2("Establecimientos inscritos y participación en Escuelas Arriba"),
+                      p("- Del total de escuelas inscritas, el",strong("66%"),"también participó el año 2021.")
+                    ),
+                    mainPanel(
+                      plotOutput("plot8"),
+                      hr()
                     )
+                    
            ),
            
            tabPanel("Base de Datos",
