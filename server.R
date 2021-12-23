@@ -121,12 +121,110 @@ function(input, output, session) {
       showEAPopup(event$id, event$lat, event$lng)
     })
   })
-  
-  ## Análisis de Datos ###########################################
-  output$bargraph <- renderPlot({
+  ## Análisis ###########################################
+  output$plot1 <- renderPlot({
     
+    total <- eadata %>% group_by(REGIÓN) %>%
+      summarise(ee = table(REGIÓN))
+    
+    ggplot(total, aes(x = ee, y = REGIÓN)) +
+      geom_col(fill = "#56B4E9") +
+      xlab("Establecimientos Inscritos")+
+      ylab("")+
+      geom_text(
+        aes(label = ee), 
+        ## make labels left-aligned
+        hjust = 1, nudge_x = -.5
+      ) +
+      theme_minimal()
   })
   
+  output$plot2 <- renderPlot({
+    
+    regiones <- eadata %>% group_by(REGIÓN) %>%
+      summarise(nuevos = sum(NUEVA=="SI")) 
+    
+    # Escuelas nuevas por región
+    ggplot(regiones, aes(x = nuevos, y = REGIÓN)) +
+      geom_col(fill = "#f1a340") +
+      xlab("Establecimientos Nuevos")+
+      ylab("")+
+      geom_text(
+        aes(label = nuevos), 
+        ## make labels left-aligned
+        hjust = 1, nudge_x = -.5
+      ) +
+      theme_minimal()
+  })
+  
+  # Escuelas por dependencia 
+  output$plot3 <- renderPlot({
+    
+  dependencia <- eadata %>% group_by(DEPENDENCIA) %>%
+    summarise(dep = table(DEPENDENCIA))
+  
+  ggplot(dependencia, aes(x = dep, y = DEPENDENCIA)) +
+    geom_col(fill = "#1a9850") +
+    xlab("Establecimientos Inscritos")+
+    ylab("")+
+    geom_text(
+      aes(label = dep), 
+      ## make labels left-aligned
+      hjust = 1, nudge_x = -.5
+    ) +
+    theme_minimal()
+  })
+  
+  # Escuelas urbanas y rurales
+  output$plot4 <- renderPlot({
+  rural <- eadata %>% group_by(RURAL) %>%
+    summarise(ru = table(RURAL))
+  
+  ggplot(rural, aes(x = ru, y = RURAL)) +
+    geom_col(fill = "#56B4E9") +
+    xlab("Establecimientos Inscritos")+
+    ylab("")+
+    geom_text(
+      aes(label = ru), 
+      ## make labels left-aligned
+      hjust = 1, nudge_x = -.5
+    ) +
+    theme_minimal()
+  })
+  
+  # Escuelas por categoría de desempeño
+  output$plot5 <- renderPlot({
+  categoria <- eadata %>% group_by(CATEGORÍA) %>%
+    summarise(cat = table(CATEGORÍA))
+  
+  ggplot(categoria, aes(x = cat, y = CATEGORÍA)) +
+    geom_col(fill = "#f1a340") +
+    xlab("Establecimientos Inscritos")+
+    ylab("")+
+    geom_text(
+      aes(label = cat), 
+      ## make labels left-aligned
+      hjust = 1, nudge_x = -.5
+    ) +
+    theme_minimal()
+  })
+  
+  # Escuelas por participación
+  output$plot6 <- renderPlot({
+  participa <- eadata %>% group_by(PARTICIPACIÓN) %>%
+    summarise(par = table(PARTICIPACIÓN)) 
+  
+  ggplot(participa, aes(x = par, y = PARTICIPACIÓN)) +
+    geom_col(fill = "#1a9850") +
+    xlab("Establecimientos Inscritos")+
+    ylab("")+
+    geom_text(
+      aes(label = par), 
+      ## make labels left-aligned
+      hjust = 1, nudge_x = -.5
+    ) +
+    theme_minimal()
+  })
   ## Data Explorer ###########################################
   
   observe({
