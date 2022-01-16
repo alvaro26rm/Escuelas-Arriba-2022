@@ -9,6 +9,11 @@ vars <- c(
   "PIE" = "PIE"
 )
 
+region <- c("ARICA Y PARINACOTA","TARAPACÁ","ANTOFAGASTA","ATACAMA","COQUIMBO",
+              "VALPARAÍSO","METROPOLITANA","O'HIGGINS","MAULE",
+              "ÑUBLE", "BIOBÍO", "LA ARAUCANÍA","LOS RÍOS","LOS LAGOS", 
+              "AYSÉN", "MAGALLANES")
+
 navbarPage("Escuelas Arriba", id="nav",
            tabPanel("Mapa interactivo",
                     div(class="outer",
@@ -28,7 +33,8 @@ navbarPage("Escuelas Arriba", id="nav",
                                       width = 330, height = "auto",
                                       h2("Explorador de Datos"),
                                       h2(),
-                                      selectInput("color", "Seleccione variable", vars)
+                                      selectInput("color", "Seleccione variable", vars),
+                                      selectInput("region", "Seleccione región", region)
                         ),
                         tags$div(id="cite",
                                  'Los datos provienen de las bases públicas del', tags$em(''), 'Centro de Estudios del Ministerio de Educación y JUNAEB (2021) .'
@@ -39,7 +45,7 @@ navbarPage("Escuelas Arriba", id="nav",
            tabPanel("Análisis",
                     sidebarPanel(
                       h2("Establecimientos inscritos por región"),
-                      p("- A la fecha se han inscrito", strong("1.922"), "escuelas."),
+                      p("- A la fecha se han inscrito", strong("1.993"), "escuelas."),
                       p("- Regiones Metropolitana, Valparapiso y Los Lagos registran mayor número de inscritos.")
                     ),
                     mainPanel(
@@ -48,8 +54,8 @@ navbarPage("Escuelas Arriba", id="nav",
                     ),
                     sidebarPanel(
                       h2("Establecimientos nuevos por región"),
-                      p("- A la fecha son", strong("636"), "las escuelas que por primera vez participarán del programa Escuelas Arriba."),
-                      p("- Las regiones de Los Lagos, el Maule y Metropolitana son las que mayor número de escuelas nuevas inscritas registran.")
+                      p("- A la fecha son", strong("653"), "las escuelas que por primera vez participarán del programa Escuelas Arriba."),
+                      p("- Las regiones de Los Lagos, La Araucanía, Valparaíso y la región Metropolitana son las que mayor número de escuelas nuevas inscritas registran.")
                     ),
                     mainPanel(
                       plotOutput("plot2"),
@@ -57,7 +63,7 @@ navbarPage("Escuelas Arriba", id="nav",
                     ),
                     sidebarPanel(
                       h2("Establecimientos inscritos por dependencia"),
-                      p("- Cerca del", strong("60%"), "de los establecimientos inscritos son municipales."),
+                      p("- Cerca del", strong("58%"), "de los establecimientos inscritos son municipales."),
                       p("- En segundo lugar están las escuelas particulares subvencionadas ",strong("(32%)"),".")
                     ),
                     mainPanel(
@@ -82,8 +88,8 @@ navbarPage("Escuelas Arriba", id="nav",
                     ),
                     sidebarPanel(
                       h2("Establecimientos inscritos por categoría de desempeño"),
-                      p("- El",strong("13%"),"de los establecimientos inscritos tienen categoría de desempeño Insuficiente."),
-                      p("- Hasta el momento hay más presencia de establecimientos con categoría Medio",strong("40%"),".")
+                      p("- El",strong("14%"),"de los establecimientos inscritos tienen categoría de desempeño Insuficiente."),
+                      p("- Hasta el momento hay más presencia de establecimientos con categoría Medio",strong("39%"),".")
                     ),
                     mainPanel(
                       plotOutput("plot6"),
@@ -91,8 +97,8 @@ navbarPage("Escuelas Arriba", id="nav",
                     ),
                     sidebarPanel(
                       h2("Establecimientos nuevos por categoría de desempeño"),
-                      p("- De las 636 escuelas nuevas, el",strong("50%"),"tienen categoría de desempeño Medio."),
-                      p("- En segundo lugar están las de categoría Medio-Bajo.")
+                      p("- De las 653 escuelas nuevas, el",strong("49%"),"tiene categoría de desempeño Medio."),
+                      p("- En segundo lugar están las de categoría Medio-Bajo",strong("49%"),".")
                     ),
                     mainPanel(
                       plotOutput("plot7"),
