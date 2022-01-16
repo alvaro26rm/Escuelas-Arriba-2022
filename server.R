@@ -5,23 +5,24 @@ library(lattice)
 require(tidyverse)
 require(dplyr)
 library(ggplot2)
-library(ggpubr)
+
 
 load("data/eadata.RData")
 
 function(input, output, session) {
   
   ## Interactive Map ###########################################
-  
+ 
   # Create the map
   output$map <- renderLeaflet({
     leaflet() %>%
       addTiles()%>%
-      setView(lng = -70.56428186, lat = -33.44872712, zoom = 10)
+      setView(lng = -70.56428186, lat = -33.44872712, zoom = 11)
     
   })
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
+ 
   
   observe({
     colorBy <- input$color
@@ -39,8 +40,8 @@ function(input, output, session) {
     
     leafletProxy("map", data = eadata) %>%
       clearShapes() %>%
-      addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
-                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
+      addCircles(~LONGITUD, ~LATITUD, layerId=~RBD,
+                 stroke=FALSE, fillOpacity=0.9, fillColor=pal(colorData), radius = 300) %>%
       addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
                 layerId="colorLegend")
   })
@@ -61,8 +62,8 @@ function(input, output, session) {
     
     leafletProxy("map", data = eadata) %>%
       clearShapes() %>%
-      addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
-                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
+      addCircles(~LONGITUD, ~LATITUD, layerId=~RBD,
+                 stroke=FALSE, fillOpacity=0.9, fillColor=pal(colorData), radius = 300) %>%
       addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
                 layerId="colorLegend")
   })
@@ -83,8 +84,8 @@ function(input, output, session) {
     
     leafletProxy("map", data = eadata) %>%
       clearShapes() %>%
-      addCircles(~LONGITUD, ~LATITUD, radius=500, layerId=~RBD,
-                 stroke=FALSE, fillOpacity=0.7, fillColor=pal(colorData)) %>%
+      addCircles(~LONGITUD, ~LATITUD, layerId=~RBD,
+                 stroke=FALSE, fillOpacity=0.9, fillColor=pal(colorData), radius = 300) %>%
       addLegend("bottomright", pal=pal, values=colorData, title=colorBy,
                 layerId="colorLegend")
   })
@@ -121,13 +122,194 @@ function(input, output, session) {
       showEAPopup(event$id, event$lat, event$lng)
     })
   })
+  
+  observe({
+    
+    regionBy <- input$region
+    
+    if (regionBy == "ARICA Y PARINACOTA") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -70.29521, lat = -18.4872, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "TARAPACÁ") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -70.15306, lat = -20.22037, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "ANTOFAGASTA") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -69.6678, lat = -22.34457, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "ATACAMA") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -70.61752, lat = -26.34415, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "COQUIMBO") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -71.24069, lat = -29.87921, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "VALPARAÍSO") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -70.93033, lat = -32.25151, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "O'HIGGINS") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -70.74107, lat = -34.17044, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "MAULE") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -71.24887, lat = -34.99082, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "ÑUBLE") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -72.10773, lat = -36.60805, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "BIOBÍO") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -72.35744, lat = -37.47366, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "LA ARAUCANÍA") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -72.70863, lat = -37.79731, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "LOS RÍOS") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -73.21349, lat = -39.82374, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "LOS LAGOS") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -73.13108, lat = -40.57559, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "AYSÉN") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -72.0508, lat = -45.57961, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "MAGALLANES") {
+      # Color and palette are treated specially in the "superzip" case, because
+      # the values are categorical instead of continuous.
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addTiles()%>%
+          setView(lng = -72.49699, lat = -51.73124, zoom = 11)
+        
+      })
+    }
+    
+    if (regionBy == "METROPOLITANA"){
+      output$map <- renderLeaflet({
+      leaflet() %>%
+        addTiles()%>%
+        setView(lng = -70.67929, lat = -33.4456, zoom = 11)
+      })
+        
+      }
+    
+    })
+  
   ## Análisis ###########################################
   output$plot1 <- renderPlot({
     
     total <- eadata %>% group_by(REGIÓN) %>%
       summarise(ee = table(REGIÓN))
     
-    ggplot(total, aes(x = ee, y = REGIÓN)) +
+    ggplot(total, aes(x = ee, y = reorder(REGIÓN, ee))) +
       geom_col(fill = "#56B4E9") +
       xlab("Establecimientos Inscritos")+
       ylab("")+
@@ -145,7 +327,7 @@ function(input, output, session) {
       summarise(nuevos = sum(NUEVA=="SI")) 
     
     # Escuelas nuevas por región
-    ggplot(regiones, aes(x = nuevos, y = REGIÓN)) +
+    ggplot(regiones, aes( x = nuevos, y = reorder(REGIÓN, nuevos))) +
       geom_col(fill = "#f1a340") +
       xlab("Establecimientos Nuevos")+
       ylab("")+
@@ -163,8 +345,8 @@ function(input, output, session) {
     dependencia <- eadata %>% group_by(DEPENDENCIA) %>%
       summarise(dep = table(DEPENDENCIA))
     
-    ggplot(dependencia, aes(x = dep, y = DEPENDENCIA)) +
-      geom_col(fill = "#1a9850") +
+    ggplot(dependencia, aes(x = dep, y = reorder(DEPENDENCIA, dep))) +
+      geom_col(fill = "springgreen3") +
       xlab("Establecimientos Inscritos")+
       ylab("")+
       geom_text(
@@ -181,7 +363,7 @@ function(input, output, session) {
     depen_nueva <- eadata %>% subset(NUEVA=="SI") %>% group_by(DEPENDENCIA) %>%
       summarise(dep = table(DEPENDENCIA))
     
-    ggplot(depen_nueva, aes(x = dep, y = DEPENDENCIA)) +
+    ggplot(depen_nueva, aes(x = dep, y = reorder(DEPENDENCIA, dep))) +
       geom_col(fill = "#56B4E9") +
       xlab("Establecimientos Nuevos")+
       ylab("")+
@@ -198,7 +380,7 @@ function(input, output, session) {
     rural <- eadata %>% group_by(RURAL) %>%
       summarise(ru = table(RURAL))
     
-    ggplot(rural, aes(x = ru, y = RURAL)) +
+    ggplot(rural, aes(x = ru, y = reorder(RURAL, ru))) +
       geom_col(fill = "#f1a340") +
       xlab("Establecimientos Inscritos")+
       ylab("")+
@@ -215,8 +397,8 @@ function(input, output, session) {
     categoria <- eadata %>% group_by(CATEGORÍA) %>%
       summarise(cat = table(CATEGORÍA))
     
-    ggplot(categoria, aes(x = cat, y = CATEGORÍA)) +
-      geom_col(fill = "#1a9850") +
+    ggplot(categoria, aes(x = cat, y = reorder(CATEGORÍA, cat))) +
+      geom_col(fill = "springgreen3") +
       xlab("Establecimientos Inscritos")+
       ylab("")+
       geom_text(
@@ -232,7 +414,7 @@ function(input, output, session) {
     cat_nueva <- eadata %>% subset(NUEVA=="SI") %>% group_by(CATEGORÍA) %>%
       summarise(cat = table(CATEGORÍA))
     
-    ggplot(cat_nueva, aes(x = cat, y = CATEGORÍA)) +
+    ggplot(cat_nueva, aes(x = cat, y = reorder(CATEGORÍA, cat))) +
       geom_col(fill = "#56B4E9") +
       xlab("Establecimientos Nuevos")+
       ylab("")+
@@ -249,7 +431,7 @@ function(input, output, session) {
     participa <- eadata %>% group_by(PARTICIPA) %>%
       summarise(par = table(PARTICIPA)) 
     
-    ggplot(participa, aes(x = par, y = PARTICIPA)) +
+    ggplot(participa, aes(x = par, y = reorder(PARTICIPA, par))) +
       geom_col(fill = "#f1a340") +
       xlab("Establecimientos Inscritos")+
       ylab("")+
@@ -318,3 +500,5 @@ function(input, output, session) {
   }  )
   
 }
+
+  
